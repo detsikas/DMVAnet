@@ -4,7 +4,5 @@ results
 .idea/misc.xml
 .idea/modules.xml
 .idea/src.iml
-*.jpg
-*.png
 *.tfrecord
 *.xlsx

@@ -1,0 +1,10 @@
+__pycache__
+results
+.idea/Binarization.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/src.iml
+*.jpg
+*.png
+*.tfrecord
+*.xlsx

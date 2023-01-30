@@ -27,3 +27,61 @@ Here is a list of the other networks contained in the repository
 The code consists of 4 directories. 
 
 | Directory | Description |
+| --------- | ----------- |
+| common/   | Common code to the rest of the project that includes loss functions, metrics, scoring functions, preprocessing functions etc. |
+| prediction/ | Scripts for predicting with a designated model and performing statistical operations on the results |
+| preprocessing/ | Code that constructs tf record datasets, performs verification on the constructed datasets, dataset operations such as merge, split, dataset augmentation scripts etc. |
+| training | Scripts that train all the networks that were investigated |
+
+## Dataset construction process
+The original datasets are in the form of original and ground truth images, separeted in different folders. Many different datasets were used for the project experiments. Even though their file system structure is similar, they cannot be handled with a single common piece of loading code. In addition to that, we opted to perform all the necessary augmentations of line and not included them in the dataset processing pipeline at training time.
+
+For these reasons, we are first constructing the tf record files for all datasets, augment them and then use them in the training of the networks. The following describe the dataset creation process in more detail:
+
+1. Split the source images into patches and save them as numpy files. This is done with the preprocess.py script.
+
+    Example usage: 
+    
+        python preprocess.py --input-path <path_to>/102_msi/S_MSI_1_0/S_MSI_1/orig/ --output-path smi/1/npy/oring --border-type reflect_101
+        
+        python preprocess.py --input-path <path_to>/S_MSI_1_0/S_MSI_1/GT/ --output-path smi/1/npy/gt --border-type reflect_101 --is_binary
+        
+2. Create a tf record file out of the store numpy files. THis is done with the dataset_to_tfrecord.py script
+
+    Example usage: 
+    
+        python dataset_to_tfrecord.py --dataset-training-path smi/1/npy/orig/ --dataset-gt-path smi/1/npy/gt/ --output-dataset-file sm1_1.tfrecord
+        
+3. Keep one channel from the label (y) images, as they are binary. fix_tf_record_y_dim.py is the script that is used for that.
+
+    Example usage: 
+    
+        python fix_tf_record_y_dim.py --tfrecord-file smi/smi_1.tfrecord --output-dataset-path .
+        
+4. Ensure that the label images are binary with the binarize_tf_record_y.py script.
+
+    Example usage: 
+    
+        python binarize_tfrecord_y.py --tfrecord smi/smi_1.tfrecord --output-dataset-path .
+        
+        
+The following steps are optional and can be run any time to verify the tf record file contents        
+1. Verify that the label data is binary with the is_y_binary.py script.
+
+    Example usage: 
+    
+        python is_y_binary.py --tfrecord smi/smi_1.tfrecord
+        
+2. Display the tf record contents. This reconstruct the images from the numpy patches. It is particularly usefule to view and verify the border policy. The display_dataset.py is used.
+
+    Example usage:
+    
+        python display_dataset.py smi/smi_1.tfrecord
+        
+3. Reconstruct the images and labels from the tf record numpy patches, compare them to the stored numpy patches of the first step of the dataset creation process and verify that all samples have been included. This is done with the verify_tfrecord.py
+
+    Example usage:
+    
+        python verify_tfrecord.py --tfrecord smi/smi_1.tfrecord --x-images-root-path smi/1/npy/orig/ --y-images-root-path smi/1/npy/gt/
+        
+

@@ -85,3 +85,45 @@ The following steps are optional and can be run any time to verify the tf record
         python verify_tfrecord.py --tfrecord smi/smi_1.tfrecord --x-images-root-path smi/1/npy/orig/ --y-images-root-path smi/1/npy/gt/
         
 
+
+
+## Training
+Each network has its own script for training. For training the DMVAnet is done with
+
+python DMVAnet.py --training-dataset-dir ../../binarization/datasets/training/ --testing-dataset-dir ../../binarization/datasets/testing/ --output-dir results/DMVAnet --epochs 150
+
+This will train the DMVAnet with all the datasets (tf record files) included in ../../binarization/datasets/training/ and use the datasets in ../../binarization/datasets/testing/  for validation. It will train for 150 epochs and output the model in the results/DMVAnet directory. Along with the saved model, the script will save tensorboard information as well as some information about the trained model that is used when predicting with it. The process stores the model everytime a better network occurs during training. Here is an example list of the training output
+
+-rw-r--r--  1 root root  101 Jan 13 14:29 info
+lrwxrwxrwx  1 root root   16 Jan 13 15:08 weights -> weights.94-0.06//
+drwxr-xr-x  4 root root 4096 Jan 12 19:56 weights.01-0.24/
+drwxr-xr-x  4 root root 4096 Jan 12 19:34 weights.01-0.64/
+drwxr-xr-x  4 root root 4096 Jan 12 19:41 weights.02-0.11/
+drwxr-xr-x  4 root root 4096 Jan 12 20:04 weights.02-0.12/
+drwxr-xr-x  4 root root 4096 Jan 12 20:11 weights.03-0.10/
+drwxr-xr-x  4 root root 4096 Jan 12 20:26 weights.05-0.09/
+drwxr-xr-x  4 root root 4096 Jan 12 20:41 weights.07-0.09/
+drwxr-xr-x  4 root root 4096 Jan 12 20:56 weights.09-0.08/
+drwxr-xr-x  4 root root 4096 Jan 12 21:04 weights.10-0.08/
+drwxr-xr-x  4 root root 4096 Jan 12 21:34 weights.14-0.08/
+drwxr-xr-x  4 root root 4096 Jan 12 22:27 weights.21-0.07/
+drwxr-xr-x  4 root root 4096 Jan 12 23:12 weights.27-0.07/
+drwxr-xr-x  4 root root 4096 Jan 13 00:27 weights.37-0.07/
+drwxr-xr-x  4 root root 4096 Jan 13 00:50 weights.40-0.07/
+drwxr-xr-x  4 root root 4096 Jan 13 01:20 weights.44-0.07/
+drwxr-xr-x  4 root root 4096 Jan 13 02:36 weights.54-0.07/
+drwxr-xr-x  4 root root 4096 Jan 13 02:43 weights.55-0.07/
+drwxr-xr-x  4 root root 4096 Jan 13 03:06 weights.58-0.06/
+drwxr-xr-x  4 root root 4096 Jan 13 04:52 weights.72-0.06/
+drwxr-xr-x  4 root root 4096 Jan 13 06:22 weights.84-0.06/
+drwxr-xr-x  4 root root 4096 Jan 13 07:36 weights.94-0.06/
+
+The symbolic link is manually created to point to the stored model that should be used for prediction (usually the latest) and it must be named 'weights'.
+
+## Prediction
+Prediction and score calculation is done with the scripts predict_single_image.py and predict_images_from_dir.py. Here is an example
+
+python predict_images_from_dir.py --images-path ../../binarization/workbench/2016/original/ --gt-images-path ../../binarization/workbench/2016/gt/ --model-path ../training/results/DMVAnete/model/ --qualifier 2016_DMVAnet
+
+The command will use the source, gt images and model from the designated directories and will store the results in an excel file names '2016_DMVAnet.xlsx'. Please note that the script will look for the 'weights' directory inside the specified model directory.
+

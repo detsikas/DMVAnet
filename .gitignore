@@ -6,3 +6,4 @@ results
 .idea/src.iml
 *.tfrecord
 *.xlsx
+.vscode/

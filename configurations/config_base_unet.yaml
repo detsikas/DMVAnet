@@ -1,0 +1,11 @@
+target_image_size: 256
+batch_size: 2
+epochs: 215
+training_dataset_path: /data/raw_binarization_datasets/
+validation_dataset_path: /data/raw_binarization_datasets/
+model_type: base_unet
+
+# epochs calculation (from the segmenter paper)
+# training_dataset_items = 2975
+# total_steps = 80000*8//batch_size
+# epochs = total_steps*batch_size//training_dataset_items

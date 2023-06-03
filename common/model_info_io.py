@@ -3,6 +3,8 @@ from enum import Enum, auto
 import sys
 import common.models as models
 
+BASE_UNET = 'base_uent'
+
 
 class ModelType(Enum):
     BASE_UNET = auto()
@@ -37,7 +39,7 @@ def read_info(filename):
 
 
 def restore_model(model_info):
-    if model_info.type == ModelType.BASE_UNET:
+    if model_info.type == BASE_UNET:
         model = models.base_unet(model_info.shape)
     elif model_info.type == ModelType.RES_UNET:
         model = models.residual_unet(model_info.shape)
@@ -54,17 +56,20 @@ def restore_model(model_info):
     elif model_info.type == ModelType.DEEPLABV3PLUS:
         model = models.deeplabv3plus(model_info.shape)
     elif model_info.type == ModelType.DILATED_MULTIRES:
-        model = models.dilated_multires_visual_attention(model_info.shape, 16, True)
+        model = models.dilated_multires_visual_attention(
+            model_info.shape, 16, True)
     elif model_info.type == ModelType.DILATED_VIS_ATTN_UNET:
         model = models.dilated_visual_attention_residual_unet(model_info.shape)
     elif model_info.type == ModelType.PRETRAINED_MOBILENET_V2_ENCODER_RESNET_UNET:
-        model, _ = models.residual_unet_with_mobilenet_v2_pretrained_input(model_info.shape)
+        model, _ = models.residual_unet_with_mobilenet_v2_pretrained_input(
+            model_info.shape)
     elif model_info.type == ModelType.PRETRAINED_VGG19_ENCODER_RESNET_UNET:
-        model, _ = models.residual_unet_with_vgg19_pretrained_input(model_info.shape)
+        model, _ = models.residual_unet_with_vgg19_pretrained_input(
+            model_info.shape)
     elif model_info.type == ModelType.PRETRAINED_VGG19_ENCODER_MULTIRESNET_UNET:
-        model, _ = models.multires_unet_with_vgg19_pretrained_input(model_info.shape)
+        model, _ = models.multires_unet_with_vgg19_pretrained_input(
+            model_info.shape)
     else:
         print('Bad model type')
         sys.exit(0)
     return model
-

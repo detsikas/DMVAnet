@@ -3,7 +3,7 @@ import argparse
 import common.dataset_utils as dataset_utils
 import os
 import datetime
-import common.model_info_io as model_info_io
+from models.models import build_model
 import common.losses as losses
 import yaml
 import sys
@@ -50,13 +50,13 @@ validation_dataset = dataset_utils.create_dataset_training_pipeline(source_direc
                                                                     batch_size=batch_size, target_size=target_image_size, augment=False)
 
 input_shape = [target_image_size, target_image_size, 3]
-model_info = model_info_io.Info(input_shape, model_type)
-model = model_info_io.restore_model(model_info)
+model = build_model(model_type=model_type, model_shape=input_shape)
+
 adam_optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001)
 model.compile(optimizer=adam_optimizer, loss=losses.DiceLoss(),
               metrics=['binary_accuracy', 'mean_squared_error'])
 print(model.summary())
-# tf.keras.utils.plot_model(model, "base_unet.png", show_shapes=True)
+
 
 if not model_only:
     model_dir = os.path.join(output_dir, 'model')
@@ -73,5 +73,3 @@ if not model_only:
         histogram_freq=1)
     history = model.fit(train_dataset, epochs=epochs, validation_data=validation_dataset,
                         callbacks=[tensorboard_callback, model_checkpoint_callback])
-
-    model_info_io.write_info(model_info, os.path.join(model_dir, 'info'))

@@ -212,3 +212,43 @@ def res_path(inputs, filters, length, activation='relu'):
         rx = tf.keras.layers.BatchNormalization()(rx)
 
     return rx
+
+# Atrous Spatial Pyramid Pooling from DeepLabV3
+
+
+def aspp(input, filters, activation):
+    output_0 = conv_block(input, kernel_size=1,
+                          filters=filters, activation=activation)
+    output_1 = conv_block(input, kernel_size=3, dilation_rate=6,
+                          filters=filters, activation=activation)
+    output_2 = conv_block(input, kernel_size=3, dilation_rate=12,
+                          filters=filters, activation=activation)
+    output_3 = conv_block(input, kernel_size=3, dilation_rate=18,
+                          filters=filters, activation=activation)
+    output_4 = tf.keras.layers.GlobalAvgPool2D(keepdims=True)(input)
+    output_4 = conv_block(output_4, filters=filters,
+                          kernel_size=1, activation=activation)
+    output_4 = tf.keras.layers.UpSampling2D(
+        size=input.shape[1], interpolation='bilinear')(output_4)
+    result = tf.keras.layers.Concatenate()(
+        [output_0, output_1, output_2, output_3, output_4])
+
+    return conv_block(result, kernel_size=1, filters=filters, activation=activation)
+
+
+def aspp_with_image_level_features(input, image_level, filters, activation):
+    output_0 = conv_block(input, kernel_size=1,
+                          filters=filters, activation=activation)
+    output_1 = conv_block(input, kernel_size=3, dilation_rate=6,
+                          filters=filters, activation=activation)
+    output_2 = conv_block(input, kernel_size=3, dilation_rate=12,
+                          filters=filters, activation=activation)
+    output_3 = conv_block(input, kernel_size=3, dilation_rate=18,
+                          filters=filters, activation=activation)
+    image_pooling = tf.keras.layers.AvgPool2D(8)(image_level)
+    output_4 = conv_block(image_pooling, filters=filters,
+                          kernel_size=1, activation=activation)
+    result = tf.keras.layers.Concatenate()(
+        [output_0, output_1, output_2, output_3, output_4])
+
+    return conv_block(result, kernel_size=1, filters=filters, activation=activation)

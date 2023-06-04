@@ -7,6 +7,7 @@ from models.models import build_model
 import common.losses as losses
 import yaml
 import sys
+import git
 
 parser = argparse.ArgumentParser(description='Train binarization model')
 parser.add_argument('--config-file', help='Configuration file', required=True)
@@ -62,6 +63,17 @@ if not model_only:
     model_dir = os.path.join(output_dir, 'model')
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
+
+    # Write git version and any uncommited diff
+    repo = git.Repo()
+    sha = repo.head.commit.hexsha
+    diff = repo.git.diff()
+    branch = repo.active_branch
+    f = open(os.path.join(output_dir, 'git_info'), "w")
+    f.write('{}\n'.format(branch))
+    f.write('{}\n'.format(sha))
+    f.write('{}\n'.format(diff))
+    f.close()
 
     checkpoint_dir = os.path.join(model_dir, 'weights')
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(

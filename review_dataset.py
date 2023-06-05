@@ -53,7 +53,7 @@ for item in dataset:
 
     # Process gt
     # x = tf.cast(tf.squeeze(label_), tf.int32)
-    y_image = gt.numpy()*255
+    y_image = (gt.numpy()*255).astype('uint8')
 
     if output_dir is not None:
         filename = f'{i}_x.jpg'

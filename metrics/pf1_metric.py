@@ -116,6 +116,14 @@ class PseudoF1Metric(tf.keras.metrics.Metric):
         temp_pseudo_p = count_skl_tp / (count_skl_fp + count_skl_tp)
         temp_pseudo_r = count_skl_tp / (count_skl_fn + count_skl_tp)
         temp_pseudo_f = 2.0 * temp_p * temp_pseudo_r / (temp_p + temp_pseudo_r)
+
+        if sample_weight is not None:
+            sample_weight = tf.cast(sample_weight, self.dtype)
+            sample_weight = tf.broadcast_to(sample_weight, temp_pseudo_p.shape)
+            temp_pseudo_p = tf.multiply(temp_pseudo_p, sample_weight)
+            temp_pseudo_r = tf.multiply(temp_pseudo_r, sample_weight)
+            temp_pseudo_f = tf.multiply(temp_pseudo_f, sample_weight)
+
         self.pf1.assign_add(temp_pseudo_f)
         self.p_precison.assign_add(temp_pseudo_p)
         self.p_recall.assign_add(temp_pseudo_r)

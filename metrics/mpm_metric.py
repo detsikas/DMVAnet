@@ -13,7 +13,7 @@ class MPMMetric(tf.keras.metrics.Metric):
     def update_state(self, y_true, y_pred, sample_weight=None):
         fp = np.zeros(y_true.shape)
         fp[(y_pred == 0) & (y_true == 1)] = 1
-        fn = np.zeros(gt_image.shape)
+        fn = np.zeros(y_true.shape)
         fn[(y_pred == 1) & (y_true == 0)] = 1
 
         kernel = np.ones((3, 3), dtype=np.uint8)
@@ -30,8 +30,14 @@ class MPMMetric(tf.keras.metrics.Metric):
         im_dp[fp == 0] = 0
         dp = np.sum(im_dp)
         mpfp = dp / nd
-        value = (mpfp + mpfn) / 2
-        self.mpm.assign_add(value)
+        values = (mpfp + mpfn) / 2
+
+        if sample_weight is not None:
+            sample_weight = tf.cast(sample_weight, self.dtype)
+            sample_weight = tf.broadcast_to(sample_weight, values.shape)
+            values = tf.multiply(values, sample_weight)
+
+        self.mpm.assign_add(values)
         self.count += 1
 
     def result(self):

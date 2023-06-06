@@ -12,8 +12,14 @@ class DiceMetric(tf.keras.metrics.Metric):
         y_pred = 1.0-tf.cast(y_pred, tf.float32)
         numerator = 2 * tf.reduce_sum(y_true * y_pred)
         denominator = tf.reduce_sum(y_true + y_pred)
-        value = 1 - numerator / denominator
-        self.dice.assign(value)
+        values = 1 - numerator / denominator
+        if sample_weight is not None:
+            sample_weight = tf.cast(sample_weight, self.dtype)
+            sample_weight = tf.broadcast_to(sample_weight, values.shape)
+            values = tf.multiply(values, sample_weight)
+
+        self.dice.assign(values)
+        self.count += 1
 
     def result(self):
         return self.dice/self.count

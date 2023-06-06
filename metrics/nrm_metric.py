@@ -19,8 +19,14 @@ class NRMMetric(tf.keras.metrics.Metric):
 
         nrfn = fn / (fn + tp)
         nrfp = fp / (fp + tn)
-        nrm = (nrfn + nrfp) / 2.0
-        self.nrm.assign_add(nrm)
+        values = (nrfn + nrfp) / 2.0
+
+        if sample_weight is not None:
+            sample_weight = tf.cast(sample_weight, self.dtype)
+            sample_weight = tf.broadcast_to(sample_weight, values.shape)
+            values = tf.multiply(values, sample_weight)
+
+        self.nrm.assign_add(values)
         self.count += 1
 
     def result(self):

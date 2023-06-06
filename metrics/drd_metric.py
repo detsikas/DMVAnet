@@ -29,7 +29,7 @@ class DRDMetric(tf.keras.metrics.Metric):
         Wnm = Wm/np.sum(Wm)
 
         diff_index = np.nonzero(y_true != y_pred)
-        DRD = 0
+        values = 0
         for x, y in zip(diff_index[0], diff_index[1]):
             gk = y_pred[x, y]
             '''
@@ -49,7 +49,7 @@ class DRDMetric(tf.keras.metrics.Metric):
                         Bk[i, j] = y_true[x+ii, y+jj]
             Dk = np.abs(Bk-gk)
             DRDk = np.sum(np.multiply(Wnm, Dk))
-            DRD += DRDk
+            values += DRDk
 
         blocks = view_as_windows(y_true, window_shape=(8, 8), step=8)
         blocks = blocks.reshape(blocks.shape[0]*blocks.shape[1], 8, 8)
@@ -58,8 +58,14 @@ class DRDMetric(tf.keras.metrics.Metric):
             block_sum = np.sum(b)
             if block_sum != 0 and block_sum != b.size:
                 NUBN += 1
-        DRD /= NUBN
-        self.drd.assign_add(DRD)
+        values /= NUBN
+
+        if sample_weight is not None:
+            sample_weight = tf.cast(sample_weight, self.dtype)
+            sample_weight = tf.broadcast_to(sample_weight, values.shape)
+            values = tf.multiply(values, sample_weight)
+
+        self.drd.assign_add(values)
         self.count += 1
 
     def result(self):

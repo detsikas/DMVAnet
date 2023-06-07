@@ -1,48 +1,36 @@
-# 92
 https://users.iit.demokritos.gr/~bgat/DIBCO2009/benchmark/DIBC02009_Test_images-handwritten.rar
 https://users.iit.demokritos.gr/~bgat/DIBCO2009/benchmark/DIBCO2009-GT-Test-images_handwritten.rar
 https://users.iit.demokritos.gr/~bgat/DIBCO2009/benchmark/DIBCO2009-GT-Test-images_printed.rar
 https://users.iit.demokritos.gr/~bgat/DIBCO2009/benchmark/DIBCO2009_Test_images-printed.rar
 
-# 93
 https://users.iit.demokritos.gr/~bgat/H-DIBCO2010/benchmark/H_DIBCO2010_GT.rar
 https://users.iit.demokritos.gr/~bgat/H-DIBCO2010/benchmark/H_DIBCO2010_test_images.rar
 
-# 94
 http://utopia.duth.gr/~ipratika/DIBCO2011/benchmark/dataset/DIBCO11-handwritten.rar
 http://utopia.duth.gr/~ipratika/DIBCO2011/benchmark/dataset/DIBCO11-machine_printed.rar
 
-# 95
 http://utopia.duth.gr/~ipratika/HDIBCO2012/benchmark/dataset/H-DIBCO2012-dataset.rar
 
-# 96
 http://utopia.duth.gr/~ipratika/DIBCO2013/benchmark/dataset/DIBCO2013-dataset.rar
 
-# 97
 https://users.iit.demokritos.gr/~bgat/HDIBCO2014/benchmark/dataset/GT.rar
 https://users.iit.demokritos.gr/~bgat/HDIBCO2014/benchmark/dataset/original_images.rar
 
-# 98
 http://vc.ee.duth.gr/h-dibco2016/benchmark/DIBCO2016_dataset-GT.zip
 http://vc.ee.duth.gr/h-dibco2016/benchmark/DIBCO2016_dataset-original.zip
 
-# 99
 http://vc.ee.duth.gr/dibco2017/benchmark/DIBCO2017_Dataset.7z
 http://vc.ee.duth.gr/dibco2017/benchmark/DIBCO2017_GT.7z
 
-# 100
 http://vc.ee.duth.gr/h-dibco2018/benchmark/dibco2018-GT.zip
 http://vc.ee.duth.gr/h-dibco2018/benchmark/dibco2018_Dataset.zip
 
-# 102
 http://www.synchromedia.ca/system/files/S_MSI_1_0.zip
 http://www.synchromedia.ca/system/files/S_MSI_2.zip
 http://www.synchromedia.ca/system/files/HISTODOC1.zip
 
-# 34
 https://www.ai.rug.nl/~sheng/MCSset.tar.gz
 
-# 103
 http://www.iapr-tc11.org/dataset/PHIBD2012/Original.zip
 http://www.iapr-tc11.org/dataset/PHIBD2012/GT.zip
 
@@ -62,6 +50,5 @@ https://zenodo.org/record/3366686/files/fontgroupsdataset-e.zip?download=1
 https://zenodo.org/record/3366686/files/fontgroupsdataset-f.zip?download=1
 https://zenodo.org/record/3366686/files/fontgroupsdataset-g.zip?download=1
 
-# Dibco 2019
 https://vc.ee.duth.gr/dibco2019/benchmark/
 

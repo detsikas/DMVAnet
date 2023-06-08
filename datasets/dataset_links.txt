@@ -25,6 +25,7 @@ http://vc.ee.duth.gr/dibco2017/benchmark/DIBCO2017_GT.7z
 http://vc.ee.duth.gr/h-dibco2018/benchmark/dibco2018-GT.zip
 http://vc.ee.duth.gr/h-dibco2018/benchmark/dibco2018_Dataset.zip
 
+# Must be manually downloaded
 http://www.synchromedia.ca/system/files/S_MSI_1_0.zip
 http://www.synchromedia.ca/system/files/S_MSI_2.zip
 http://www.synchromedia.ca/system/files/HISTODOC1.zip

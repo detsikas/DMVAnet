@@ -15,7 +15,7 @@ if not os.path.exists('PHIBD2012/GT.zip'):
     os.system(
         'wget http://www.iapr-tc11.org/dataset/PHIBD2012/GT.zip')
 
-os.system('unzip -o PHIBD2012/GT.zip')
+os.system('unzip -o GT.zip')
 
 if not os.path.exists('Original.zip'):
     os.system(
@@ -35,8 +35,10 @@ if not os.path.exists(full_installation_gt_path):
 input_path = 'GT'
 for filename in os.listdir(input_path):
     full_path = os.path.join(input_path, filename)
+    basename, extension = os.path.splitext(filename)
+    stem = basename[:9]
     full_output_path = os.path.join(
-        full_installation_gt_path, filename)
+        full_installation_gt_path, f'{stem}{extension}')
     os.system(f'cp {full_path} {full_output_path}')
 
 input_path = 'Original'

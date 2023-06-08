@@ -2,40 +2,35 @@ import tensorflow as tf
 import numpy as np
 import argparse
 import os
-import common.dataset_utils as dataset_utils
 from matplotlib import pyplot as plt
 from PIL import Image
+from datasets import dataset_utils as dataset_utils
 from matplotlib import image as mpimg
 
 # Input arguments
 parser = argparse.ArgumentParser(description='Review (train) dataset')
 parser.add_argument('--target-image-size', type=int,
-                    help='Desired image size before fine tuning (only square shapes allowed)', required=True)
-parser.add_argument('--patch-size', type=int,
-                    help='Patch size (default: 16)', default=16)
-parser.add_argument('--classes', type=int,
-                    help='Number of classes', required=True)
+                    help='Desired image size before fine tuning. If 0, original size will be used', required=True)
 parser.add_argument('--dataset-source-path',
-                    help='Path to root of cityscape dataset', required=True)
+                    help='Path to root of dataset', required=True)
 parser.add_argument(
     '--output-dir', help='If specified, images will be stored there')
 parser.add_argument('--display-images',
                     help='Whether to display images',
                     action='store_true')
+parser.add_argument('--augment', action='store_true')
 args = parser.parse_args()
 
 target_image_size = args.target_image_size
-patch_size = args.patch_size
-number_of_classes = args.classes
 dataset_source_path = args.dataset_source_path
 output_dir = args.output_dir
 display_images = args.display_images
+augment = args.augment
 
 if output_dir is not None and not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-dataset = dataset_utils.create_dataset_training_pipeline(
-    dataset_source_path, 'train', number_of_classes, 1, target_image_size, True)
+dataset = dataset_utils.create_dataset_training_pipeline(dataset_source_path, 1, target_image_size, augment)
 
 i = 0
 for item in dataset:

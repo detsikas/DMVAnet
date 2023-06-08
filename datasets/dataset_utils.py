@@ -28,20 +28,25 @@ def ensure_shape_for_single_image(images_, labels_):
 
 
 def preprocess_training_data(image, label, target_image_size, augment):
-    scale = tf.random.uniform([1], minval=0.75, maxval=2.0)[0]
-    new_shape = [tf.cast(tf.cast(tf.shape(image)[0], tf.float32)*scale, tf.int32),
-                 tf.cast(tf.cast(tf.shape(image)[1], tf.float32)*scale, tf.int32)]
-
     seed = RANDOM_GENERATOR.make_seeds(2)[0]
-    # For random transforms reference in torchvision
-    # https://mmsegmentation.readthedocs.io/en/latest/_modules/mmseg/datasets/pipelines/transforms.html
-    x = tf.image.resize(image, new_shape)
-    y = tf.image.resize(label, new_shape)
 
-    x = tf.image.stateless_random_crop(value=x, size=(target_image_size, target_image_size, x.shape[-1]),
-                                       seed=seed)
-    y = tf.image.stateless_random_crop(value=y, size=(target_image_size, target_image_size, y.shape[-1]),
-                                       seed=seed)
+    if target_image_size!=0:
+        scale = tf.random.uniform([1], minval=0.75, maxval=2.0)[0]
+        new_shape = [tf.cast(tf.cast(tf.shape(image)[0], tf.float32)*scale, tf.int32),
+                     tf.cast(tf.cast(tf.shape(image)[1], tf.float32)*scale, tf.int32)]
+
+        # For random transforms reference in torchvision
+        # https://mmsegmentation.readthedocs.io/en/latest/_modules/mmseg/datasets/pipelines/transforms.html
+        x = tf.image.resize(image, new_shape)
+        y = tf.image.resize(label, new_shape)
+
+        x = tf.image.stateless_random_crop(value=x, size=(target_image_size, target_image_size, x.shape[-1]),
+                                           seed=seed)
+        y = tf.image.stateless_random_crop(value=y, size=(target_image_size, target_image_size, y.shape[-1]),
+                                           seed=seed)
+    else:
+        x = image
+        y = image
 
     if augment:
         x = tf.image.stateless_random_flip_left_right(image=x, seed=seed)

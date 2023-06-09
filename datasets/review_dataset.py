@@ -1,11 +1,10 @@
-import tensorflow as tf
-import numpy as np
 import argparse
 import os
 from matplotlib import pyplot as plt
 from PIL import Image
-from datasets import dataset_utils as dataset_utils
-from matplotlib import image as mpimg
+import dataset_utils
+from matplotlib import image
+import sys
 
 # Input arguments
 parser = argparse.ArgumentParser(description='Review (train) dataset')

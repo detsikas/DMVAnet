@@ -39,7 +39,7 @@ input_path = 'H_DIBCO2010_GT'
 for filename in os.listdir(input_path):
     if 'estGT' in filename:
         full_path = os.path.join(input_path, filename)
-        image = cv2.imread(full_path)
+        image = cv2.imread(full_path, cv2.IMREAD_GRAYSCALE)
         basename, extension = os.path.splitext(filename)
         stem = basename.split('_')[0]
         full_output_path = os.path.join(

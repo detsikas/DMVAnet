@@ -52,6 +52,10 @@ for item in dataset:
         print('x, y shape mismatch')
         sys.exit(0)
 
+    if len(y_image.shape) != 3 or len(image_np.shape) != 3 or y_image.shape[-1] != 1:
+        print('x, y bad shapes')
+        sys.exit(0)
+
     if output_dir is not None:
         filename = f'{i}_x.jpg'
         filename = os.path.join(output_dir, filename)
@@ -74,7 +78,7 @@ for item in dataset:
         plt.title("x")
 
         fig.add_subplot(1, 2, 2)
-        plt.imshow(y_image.astype('uint8'))
+        plt.imshow(y_image.astype('uint8'), cmap='gray', vmin=0, vmax=255)
         plt.axis('off')
         plt.title("y")
         plt.waitforbuttonpress()

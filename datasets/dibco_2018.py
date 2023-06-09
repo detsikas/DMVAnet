@@ -35,12 +35,12 @@ if not os.path.exists(full_installation_gt_path):
 input_path = 'gt'
 for filename in os.listdir(input_path):
     full_path = os.path.join(input_path, filename)
-    image = cv2.imread(full_path)
+    image = cv2.imread(full_path, cv2.IMREAD_GRAYSCALE)
     basename, extension = os.path.splitext(filename)
     stem = basename.split('_')[0]
     full_output_path = os.path.join(
-        full_installation_gt_path, f'{stem}{extension}')
-    os.system(f'cp {full_path} {full_output_path}')
+        full_installation_gt_path, f'{stem}.jpg')
+    cv2.imwrite(full_output_path, image)
 
 input_path = 'dataset'
 for filename in os.listdir(input_path):

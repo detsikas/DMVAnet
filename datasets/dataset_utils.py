@@ -24,7 +24,7 @@ def decode_dataset(path_ds, size=None):
 
 
 def ensure_shape_for_single_image(images_, labels_):
-    return tf.ensure_shape(images_, (None, None, 3)), tf.ensure_shape(labels_, (None, None, 3))
+    return tf.ensure_shape(images_, (None, None, 3)), tf.ensure_shape(labels_, (None, None, 1))
 
 
 def preprocess_training_data(image, label, target_image_size, augment):

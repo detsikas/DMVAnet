@@ -34,15 +34,18 @@ input_path = 'mcs'
 for filename in os.listdir(input_path):
     if '.png' in filename:
         full_path = os.path.join(input_path, filename)
+        basename, extension = os.path.splitext(filename)
         if 'GT-' in filename:
             filename = filename[3:]
             full_output_path = os.path.join(
-                full_installation_gt_path, filename)
+                full_installation_gt_path, f'{basename}.jpg')
+            image = cv2.imread(full_path, cv2.IMREAD_GRAYSCALE)
+            cv2.imwrite(full_output_path, image)
         else:
+            image = cv2.imread(full_path)
             full_output_path = os.path.join(
                 full_installation_original_path, filename)
-        os.system(f'cp {full_path} {full_output_path}')
-
+            cv2.imwrite(full_output_path, image)
 # Clean up
 os.system('rm -rf mcs')
 os.system('rm MCSset.tar.gz')

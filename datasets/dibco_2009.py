@@ -47,7 +47,7 @@ for filename in os.listdir(input_path):
 input_path = 'DIBCO2009-GT-Test-images_handwritten'
 for filename in os.listdir(input_path):
     full_path = os.path.join(input_path, filename)
-    image = cv2.imread(full_path)
+    image = cv2.imread(full_path, cv2.IMREAD_GRAYSCALE)
     basename, extension = os.path.splitext(filename)
     full_output_path = os.path.join(
         full_installation_gt_path, f'{basename}.jpg')
@@ -63,7 +63,7 @@ for filename in os.listdir(input_path):
 input_path = 'DIBCO2009-GT-Test-images_printed'
 for filename in os.listdir(input_path):
     full_path = os.path.join(input_path, filename)
-    image = cv2.imread(full_path)
+    image = cv2.imread(full_path, cv2.IMREAD_GRAYSCALE)
     basename, extension = os.path.splitext(filename)
     full_output_path = os.path.join(
         full_installation_gt_path, f'{basename}.jpg')

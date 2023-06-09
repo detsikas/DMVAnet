@@ -31,7 +31,7 @@ input_path = 'H-DIBCO2012-dataset/H-DIBCO2012-dataset'
 for filename in os.listdir(input_path):
     full_path = os.path.join(input_path, filename)
     if '_GT' in filename:
-        image = cv2.imread(full_path)
+        image = cv2.imread(full_path, cv2.IMREAD_GRAYSCALE)
         basename, extension = os.path.splitext(filename)
         stem = basename.split('_')[0]
         full_output_path = os.path.join(

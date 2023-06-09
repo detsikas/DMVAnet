@@ -12,7 +12,7 @@ rescale_01 = tf.keras.layers.Rescaling(scale=1. / 255.0)
 
 def preprocess_label(label):
     y = rescale_01(label)
-    #y = tf.cast(y, tf.int32)
+    # y = tf.cast(y, tf.int32)
     return tf.cast(y, tf.float32)
 
 
@@ -126,11 +126,20 @@ def configure_dataset(dataset_, batch_size=1):
     return dataset_
 
 
+def get_directory_depth(source_directory):
+    subdirectories = os.listdir(source_directory)
+    if 'original' in subdirectories and 'gt' in subdirectories:
+        return 1
+
+    return 2
+
+
 def initialize_dataset(source_directory):
+    depth = get_directory_depth(source_directory=source_directory)
     x_path = os.path.join(
-        source_directory, '*/original/*.*')
+        source_directory, '*/original/*.*'if depth == 2 else 'original/*.*')
     y_path = os.path.join(
-        source_directory, '*/gt/*.*')
+        source_directory, '*/gt/*.*' if depth == 2 else 'gt/*.*')
 
     # Retrieve the x and y image filenames
     img_path_ds = tf.data.Dataset.list_files(

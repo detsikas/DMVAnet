@@ -47,6 +47,11 @@ for item in dataset:
 
     # Process gt
     y_image = (gt.numpy()*255).astype('uint8')
+    print(f'shape: {image_np.shape}')
+
+    if image_np.shape[0] != y_image.shape[0] or image_np.shape[1] != y_image.shape[1]:
+        print('x, y shape mismatch')
+        sys.exit(0)
 
     if output_dir is not None:
         filename = f'{i}_x.jpg'

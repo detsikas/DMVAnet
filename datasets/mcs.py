@@ -38,8 +38,9 @@ for filename in os.listdir(input_path):
         if 'GT-' in filename:
             filename = filename[3:]
             full_output_path = os.path.join(
-                full_installation_gt_path, f'{basename}.jpg')
+                full_installation_gt_path, f'{basename}.png')
             image = cv2.imread(full_path, cv2.IMREAD_GRAYSCALE)
+            _, image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
             cv2.imwrite(full_output_path, image)
         else:
             image = cv2.imread(full_path)

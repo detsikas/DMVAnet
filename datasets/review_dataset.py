@@ -56,6 +56,10 @@ for item in dataset:
         print('x, y bad shapes')
         sys.exit(0)
 
+    if not dataset_utils.is_binary(y_image):
+        print('y is not binary')
+        sys.exit(0)
+
     if output_dir is not None:
         filename = f'{i}_x.jpg'
         filename = os.path.join(output_dir, filename)

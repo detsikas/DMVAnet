@@ -40,10 +40,11 @@ for filename in os.listdir(input_path):
     if 'estGT' in filename:
         full_path = os.path.join(input_path, filename)
         image = cv2.imread(full_path, cv2.IMREAD_GRAYSCALE)
+        _, image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
         basename, extension = os.path.splitext(filename)
         stem = basename.split('_')[0]
         full_output_path = os.path.join(
-            full_installation_gt_path, f'{stem}.jpg')
+            full_installation_gt_path, f'{stem}.png')
         cv2.imwrite(full_output_path, image)
 
 input_path = 'H_DIBCO2010_test_images'
@@ -53,7 +54,7 @@ for filename in os.listdir(input_path):
     if extension == '.tif':
         image = cv2.imread(full_path)
         full_output_path = os.path.join(
-            full_installation_original_path, f'{basename}.jpg')
+            full_installation_original_path, f'{basename}.png')
         cv2.imwrite(full_output_path, image)
     else:
         full_output_path = os.path.join(

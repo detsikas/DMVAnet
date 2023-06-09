@@ -1,5 +1,6 @@
 import tensorflow as tf
 import os
+import numpy as np
 
 
 RANDOM_GENERATOR = tf.random.Generator.from_non_deterministic_state()
@@ -8,6 +9,10 @@ NormalizationLayer = tf.keras.layers.Normalization(axis=-1, mean=[123.675, 116.2
 
 rescale_m11 = tf.keras.layers.Rescaling(scale=1. / 127.5, offset=-1)
 rescale_01 = tf.keras.layers.Rescaling(scale=1. / 255.0)
+
+
+def is_binary(image):
+    return np.count_nonzero((image > 0) & (image < 255)) == 0
 
 
 def preprocess_label(label):

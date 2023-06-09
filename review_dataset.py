@@ -10,7 +10,7 @@ from matplotlib import image as mpimg
 # Input arguments
 parser = argparse.ArgumentParser(description='Review (train) dataset')
 parser.add_argument('--target-image-size', type=int,
-                    help='Desired image size before fine tuning. If 0, original size will be used', required=True)
+                    help='Desired image size before fine tuning. If not set, original size will be used')
 parser.add_argument('--dataset-source-path',
                     help='Path to root of dataset', required=True)
 parser.add_argument(
@@ -30,7 +30,9 @@ augment = args.augment
 if output_dir is not None and not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-dataset = dataset_utils.create_dataset_training_pipeline(dataset_source_path, 1, target_image_size, augment)
+dataset = dataset_utils.create_dataset_training_pipeline(
+    dataset_source_path, 1, target_image_size, augment)
+
 
 i = 0
 for item in dataset:
@@ -42,12 +44,8 @@ for item in dataset:
     x *= 127.5
 
     image_np = x.numpy()
-    mean = np.mean(image_np, axis=(0, 1))
-    stddev = np.std(image_np, axis=(0, 1))
-    print(f'Mean: {mean}, stddev: {stddev}')
 
     # Process gt
-    # x = tf.cast(tf.squeeze(label_), tf.int32)
     y_image = (gt.numpy()*255).astype('uint8')
 
     if output_dir is not None:
@@ -61,6 +59,10 @@ for item in dataset:
 
     if display_images:
         fig = plt.figure(figsize=(10, 7))
+        ax = plt.axes()
+        ax.set_facecolor("gray")
+        manager = plt.get_current_fig_manager()
+        manager.full_screen_toggle()
 
         fig.add_subplot(1, 2, 1)
         plt.imshow(image_np.astype('uint8'))
@@ -72,5 +74,6 @@ for item in dataset:
         plt.axis('off')
         plt.title("y")
         plt.waitforbuttonpress()
+        plt.close('all')
 
     i += 1

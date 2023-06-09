@@ -12,7 +12,7 @@ rescale_01 = tf.keras.layers.Rescaling(scale=1. / 255.0)
 
 def preprocess_label(label):
     y = rescale_01(label)
-    y = tf.cast(y, tf.int32)
+    #y = tf.cast(y, tf.int32)
     return tf.cast(y, tf.float32)
 
 
@@ -30,7 +30,7 @@ def ensure_shape_for_single_image(images_, labels_):
 def preprocess_training_data(image, label, target_image_size, augment):
     seed = RANDOM_GENERATOR.make_seeds(2)[0]
 
-    if target_image_size!=0:
+    if target_image_size is not None:
         scale = tf.random.uniform([1], minval=0.75, maxval=2.0)[0]
         new_shape = [tf.cast(tf.cast(tf.shape(image)[0], tf.float32)*scale, tf.int32),
                      tf.cast(tf.cast(tf.shape(image)[1], tf.float32)*scale, tf.int32)]
@@ -46,7 +46,7 @@ def preprocess_training_data(image, label, target_image_size, augment):
                                            seed=seed)
     else:
         x = image
-        y = image
+        y = label
 
     if augment:
         x = tf.image.stateless_random_flip_left_right(image=x, seed=seed)
@@ -128,9 +128,9 @@ def configure_dataset(dataset_, batch_size=1):
 
 def initialize_dataset(source_directory):
     x_path = os.path.join(
-        source_directory, 'x/*/*.*')
+        source_directory, '*/original/*.*')
     y_path = os.path.join(
-        source_directory, 'y/*/*.*')
+        source_directory, '*/gt/*.*')
 
     # Retrieve the x and y image filenames
     img_path_ds = tf.data.Dataset.list_files(

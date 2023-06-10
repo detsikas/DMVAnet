@@ -11,7 +11,7 @@ python hdibco_2014.py $1
 python mcs.py $1
 python phibd_2012.py $1
 python msi.py $1
-python msi_histdoc.py $1
+python msi_histodoc.py $1
 python denoising_dirty_documents.py $1
 python nabuco.py $1
 

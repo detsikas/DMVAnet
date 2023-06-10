@@ -42,14 +42,14 @@ manually at https://www.kaggle.com/c/denoising-dirty-documents/data
 manually
 
 # 106
-https://zenodo.org/record/3366686/files/fontgroupsdataset-labels.zip?download=1
-https://zenodo.org/record/3366686/files/fontgroupsdataset-a.zip?download=1
-https://zenodo.org/record/3366686/files/fontgroupsdataset-b.zip?download=1
-https://zenodo.org/record/3366686/files/fontgroupsdataset-c.zip?download=1
-https://zenodo.org/record/3366686/files/fontgroupsdataset-d.zip?download=1
-https://zenodo.org/record/3366686/files/fontgroupsdataset-e.zip?download=1
-https://zenodo.org/record/3366686/files/fontgroupsdataset-f.zip?download=1
-https://zenodo.org/record/3366686/files/fontgroupsdataset-g.zip?download=1
+https://zenodo.org/record/3366686/files/fontgroupsdataset-labels.zip
+https://zenodo.org/record/3366686/files/fontgroupsdataset-a.zip
+https://zenodo.org/record/3366686/files/fontgroupsdataset-b.zip
+https://zenodo.org/record/3366686/files/fontgroupsdataset-c.zip
+https://zenodo.org/record/3366686/files/fontgroupsdataset-d.zip
+https://zenodo.org/record/3366686/files/fontgroupsdataset-e.zip
+https://zenodo.org/record/3366686/files/fontgroupsdataset-f.zip
+https://zenodo.org/record/3366686/files/fontgroupsdataset-g.zip
 
 https://vc.ee.duth.gr/dibco2019/benchmark/
 

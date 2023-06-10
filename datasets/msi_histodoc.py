@@ -3,6 +3,8 @@ import argparse
 import cv2
 import re
 
+# HISTODOC1.zip is required to be at the same folder as the script
+
 parser = argparse.ArgumentParser(description='Setup MSI dataset')
 parser.add_argument('installation_path', help='Where to install the dataset')
 args = parser.parse_args()

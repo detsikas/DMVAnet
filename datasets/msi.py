@@ -2,6 +2,8 @@ import os
 import argparse
 import cv2
 
+# S_MSI_1_0.zip and S_MSI_2.zip are required to be at the same folder as the script
+
 parser = argparse.ArgumentParser(description='Setup MSI dataset')
 parser.add_argument('installation_path', help='Where to install the dataset')
 args = parser.parse_args()

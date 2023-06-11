@@ -2,7 +2,7 @@ import os
 import argparse
 import cv2
 
-parser = argparse.ArgumentParser(description='Setup DIBCO 2016 dataset')
+parser = argparse.ArgumentParser(description='Setup H-DIBCO 2016 dataset')
 parser.add_argument('installation_path', help='Where to install the dataset')
 args = parser.parse_args()
 
@@ -23,7 +23,7 @@ if not os.path.exists('DIBCO2016_dataset-original.zip'):
 
 os.system('unzip -o DIBCO2016_dataset-original.zip')
 
-subpath = 'dibco2016'
+subpath = 'hdibco2016'
 full_installation_original_path = os.path.join(
     installation_path, subpath, 'original')
 full_installation_gt_path = os.path.join(installation_path, subpath, 'gt')

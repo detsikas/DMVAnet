@@ -1,5 +1,5 @@
 import tensorflow as tf
-from common_blocks import conv_block, multi_res_block, res_path, visual_attention_block
+from .common_blocks import conv_block, multi_res_block, res_path, visual_attention_block
 
 
 def multires_unet_with_vgg19_pretrained_input(input_shape, activation='relu'):

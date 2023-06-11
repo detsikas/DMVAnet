@@ -1,5 +1,5 @@
 import tensorflow as tf
-from common import conv_block
+from .common_blocks import conv_block
 
 
 def base_unet(input_shape, starting_filters=16, activation='relu'):

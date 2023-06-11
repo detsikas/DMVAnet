@@ -1,6 +1,6 @@
 
 import tensorflow as tf
-from common_blocks import multi_res_block, res_path, visual_attention_block
+from .common_blocks import multi_res_block, res_path, visual_attention_block
 
 
 def multires_visual_attention(input_shape, starting_filters=16, with_dropout=False, activation='relu'):

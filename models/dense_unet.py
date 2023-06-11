@@ -1,5 +1,5 @@
 import tensorflow as tf
-from common_blocks import conv_block, dense_block
+from .common_blocks import conv_block, dense_block
 
 
 def dense_unet(input_shape, starting_filters=16, activation='relu'):

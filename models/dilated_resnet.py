@@ -1,5 +1,5 @@
 import tensorflow as tf
-from common_blocks import conv_block, residual_block, dilated_residual_block, aspp_with_image_level_features
+from .common_blocks import conv_block, residual_block, dilated_residual_block, aspp_with_image_level_features
 
 
 def dilated_resnet(input_shape, starting_filters=16, activation='relu'):

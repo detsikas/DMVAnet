@@ -1,10 +1,10 @@
 import tensorflow as tf
 import argparse
-import common.dataset_utils as dataset_utils
+import datasets.dataset_utils as dataset_utils
 import os
 import datetime
 from models.models import build_model
-import common.losses as losses
+from losses.dice_loss import DiceLoss
 import yaml
 import sys
 import git
@@ -54,7 +54,7 @@ input_shape = [target_image_size, target_image_size, 3]
 model = build_model(model_type=model_type, model_shape=input_shape)
 
 adam_optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001)
-model.compile(optimizer=adam_optimizer, loss=losses.DiceLoss(),
+model.compile(optimizer=adam_optimizer, loss=DiceLoss(),
               metrics=['binary_accuracy', 'mean_squared_error'])
 print(model.summary())
 
@@ -77,7 +77,7 @@ if not model_only:
 
     checkpoint_dir = os.path.join(model_dir, 'weights')
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-        filepath=checkpoint_dir, save_best_only=True)
+        filepath=checkpoint_dir, save_best_only=True, monitor='val_binary_accuracy', mode='max')
 
     tensorboard_callback = tf.keras.callbacks.TensorBoard(
         log_dir=os.path.join(output_dir, 'tensorboard_{}'.format(

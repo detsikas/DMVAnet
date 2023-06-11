@@ -1,5 +1,5 @@
 import tensorflow as tf
-from common_blocks import multi_res_block, res_path, visual_attention_block
+from .common_blocks import multi_res_block, res_path, visual_attention_block
 
 
 def unet_pp(input_shape, with_dropout=False, number_of_levels=5, starting_filters=16):

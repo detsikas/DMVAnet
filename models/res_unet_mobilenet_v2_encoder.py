@@ -1,5 +1,5 @@
 import tensorflow as tf
-from common_blocks import conv_block, residual_block
+from .common_blocks import conv_block, residual_block
 
 
 def residual_unet_with_mobilenet_v2_pretrained_input(input_shape, activation='relu'):

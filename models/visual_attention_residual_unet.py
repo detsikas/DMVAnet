@@ -1,5 +1,5 @@
 import tensorflow as tf
-from common_blocks import conv_block, residual_block, visual_attention_block
+from .common_blocks import conv_block, residual_block, visual_attention_block
 
 
 def visual_attention_residual_unet(input_shape, starting_filters=16, activation='relu'):

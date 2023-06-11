@@ -1,5 +1,5 @@
 import tensorflow as tf
-from common_blocks import multi_res_block, res_path, dilated_multi_res_block, visual_attention_block
+from .common_blocks import multi_res_block, res_path, dilated_multi_res_block, visual_attention_block
 
 
 def dilated_multires_visual_attention(input_shape, starting_filters=16, with_dropout=False, activation='relu'):

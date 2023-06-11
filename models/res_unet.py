@@ -1,5 +1,5 @@
 import tensorflow as tf
-from common_blocks import conv_block, residual_block
+from .common_blocks import conv_block, residual_block
 
 
 def residual_unet(input_shape, starting_filters=16, activation='relu'):

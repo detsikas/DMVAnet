@@ -1,19 +1,19 @@
 import sys
-from base_unet import base_unet
-from res_unet import residual_unet
-from visual_attention_residual_unet import visual_attention_residual_unet
-from multires_visual_attention_unet import multires_visual_attention
-from unet_pp import unet_pp
-from dense_unet import dense_unet
-from dilated_resnet import dilated_resnet
-from deeplabv3plus import deeplabv3plus
-from dilated_multires_visual_attention_unet import dilated_multires_visual_attention
-from dilated_visual_attention_res_unet import dilated_visual_attention_residual_unet
-from res_unet_mobilenet_v2_encoder import residual_unet_with_mobilenet_v2_pretrained_input
-from res_unet_vgg19_encoder import residual_unet_with_vgg19_pretrained_input
-from multires_unet_vgg19_encoder import multires_unet_with_vgg19_pretrained_input
+from .base_unet import base_unet
+from .res_unet import residual_unet
+from .visual_attention_residual_unet import visual_attention_residual_unet
+from .multires_visual_attention_unet import multires_visual_attention
+from .unet_pp import unet_pp
+from .dense_unet import dense_unet
+from .dilated_resnet import dilated_resnet
+from .deeplabv3plus import deeplabv3plus
+from .dilated_multires_visual_attention_unet import dilated_multires_visual_attention
+from .dilated_visual_attention_res_unet import dilated_visual_attention_residual_unet
+from .res_unet_mobilenet_v2_encoder import residual_unet_with_mobilenet_v2_pretrained_input
+from .res_unet_vgg19_encoder import residual_unet_with_vgg19_pretrained_input
+from .multires_unet_vgg19_encoder import multires_unet_with_vgg19_pretrained_input
 
-BASE_UNET = 'base_uent'
+BASE_UNET = 'base_unet'
 RES_UNET = 'res_unet'
 VIS_ATTN_UNET = 'visual_attention_unet'
 MULTIRES_UNET = 'multires_unet'
@@ -47,7 +47,7 @@ def build_model(model_type, model_shape):
         model = deeplabv3plus(model_shape)
     elif model_type == DILATED_MULTIRES:
         model = dilated_multires_visual_attention(
-            shape, 16, True)
+            None, 16, True)
     elif model_type == DILATED_VIS_ATTN_UNET:
         model = dilated_visual_attention_residual_unet(model_shape)
     elif model_type == PRETRAINED_MOBILENET_V2_ENCODER_RES_UNET:

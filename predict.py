@@ -2,7 +2,6 @@ import tensorflow as tf
 import numpy as np
 from models.models import build_model
 import datasets.dataset_utils as dataset_utils
-import tensorflow_addons as tfa
 import argparse
 import yaml
 import os
@@ -13,7 +12,7 @@ from metrics.nrm_metric import NRMMetric
 from metrics.mpm_metric import MPMMetric
 from metrics.psnr_metric import PSNRMetric
 from metrics.dice_metric import DiceMetric
-import cv2
+from metrics.f1_metric import F1Metric
 
 parser = argparse.ArgumentParser(
     description='Predict validation images')
@@ -96,8 +95,7 @@ binary_accuracy_metric = [tf.keras.metrics.BinaryAccuracy()
 precision_metric = [tf.keras.metrics.Precision()
                     for i in range(len(img_ratios))]
 recall_metric = [tf.keras.metrics.Recall() for i in range(len(img_ratios))]
-f1_metric = [tfa.metrics.F1Score(num_classes=2)
-             for i in range(len(img_ratios))]
+f1_metric = [F1Metric() for i in range(len(img_ratios))]
 pf1_metric = [PseudoF1Metric() for i in range(len(img_ratios))]
 drd_metric = [DRDMetric() for i in range(len(img_ratios))]
 nrm_metric = [NRMMetric() for i in range(len(img_ratios))]
@@ -127,7 +125,8 @@ for i, (x, y) in enumerate(validation_dataset):
         binary_accuracy_metric[j].update_state(y, reconstructed_image)
         precision_metric[j].update_state(y, reconstructed_image)
         recall_metric[j].update_state(y, reconstructed_image)
-        # f1_metric[j].update_state(y, reconstructed_image)
+        f1_metric[j].update_state(tf.squeeze(
+            y, axis=-1).numpy().astype(int), threshold_image(tf.squeeze(reconstructed_image, axis=-1).numpy().astype(int)))
         pf1_metric[j].update_state(tf.squeeze(
             y, axis=-1).numpy(), tf.squeeze(reconstructed_image, axis=-1).numpy())
         # drd_metric[j].update_state(tf.squeeze(
@@ -140,26 +139,37 @@ for i, (x, y) in enumerate(validation_dataset):
     values = [mse_metric[j].result().numpy() for j in range(len(img_ratios))]
     print(
         f'Batch {i} MSE :\t{values} - mean {np.mean(values)}')
+
     values = [binary_cross_entropy_metric[j].result().numpy()
               for j in range(len(img_ratios))]
     print(
         f'Batch {i} BCE:\t{values} - mean {np.mean(values)}')
+
     values = [binary_accuracy_metric[j].result().numpy()
               for j in range(len(img_ratios))]
     print(
         f'Batch {i} PAC:\t{values} - mean {np.mean(values)}')
+
     values = [precision_metric[j].result().numpy()
               for j in range(len(img_ratios))]
     print(
         f'Batch {i} PREC:\t{values} - mean {np.mean(values)}')
+
     values = [recall_metric[j].result().numpy()
               for j in range(len(img_ratios))]
     print(
         f'Batch {i} REC:\t{values} - mean {np.mean(values)}')
+
+    values = [f1_metric[j].result().numpy()
+              for j in range(len(img_ratios))]
+    print(
+        f'Batch {i} f1:\t{values} - mean {np.mean(values)}')
+
     values = [pf1_metric[j].result()['p_f1'].numpy()
               for j in range(len(img_ratios))]
     print(
         f'Batch {i} pf1:\t{values} - mean {np.mean(values)}')
+
     values = [psnr_metric[j].result().numpy()
               for j in range(len(img_ratios))]
     print(

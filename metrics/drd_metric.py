@@ -11,9 +11,6 @@ class DRDMetric(tf.keras.metrics.Metric):
         self.count = 0
 
     def update_state(self, y_true, y_pred, sample_weight=None):
-        y_true = y_true.numpy()
-        y_pred = y_pred.numpy()
-
         rows, cols = tf.shape(y_pred)
         n = 2
         m = 2*n+1

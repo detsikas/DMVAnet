@@ -8,7 +8,7 @@ class PSNRMetric(tf.keras.metrics.Metric):
         self.count = 0
 
     def update_state(self, y_true, y_pred, sample_weight=None):
-        values = tf.image.psnr(y_true, y_pred, max_value=1)
+        values = tf.image.psnr(y_true, y_pred, max_val=1)
 
         if sample_weight is not None:
             sample_weight = tf.cast(sample_weight, self.dtype)

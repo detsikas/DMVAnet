@@ -106,8 +106,8 @@ dice_metric = [DiceMetric() for i in range(len(img_ratios))]
 
 def threshold_image(img):
     local_image = np.copy(img)
-    local_image[local_image < 0.5] = 0
-    local_image[local_image >= 0.5] = 1
+    local_image[local_image <= 0.5] = 0
+    local_image[local_image > 0.5] = 1
     return local_image.astype('uint8')
 
 
@@ -125,8 +125,8 @@ for i, (x, y) in enumerate(validation_dataset):
         binary_accuracy_metric[j].update_state(y, reconstructed_image)
         precision_metric[j].update_state(y, reconstructed_image)
         recall_metric[j].update_state(y, reconstructed_image)
-        f1_metric[j].update_state(tf.squeeze(
-            y, axis=-1).numpy().astype(int), threshold_image(tf.squeeze(reconstructed_image, axis=-1).numpy().astype(int)))
+        f1_metric[j].update_state(y.numpy().astype(int), threshold_image(
+            reconstructed_image.astype(int)))
         pf1_metric[j].update_state(tf.squeeze(
             y, axis=-1).numpy(), tf.squeeze(reconstructed_image, axis=-1).numpy())
         # drd_metric[j].update_state(tf.squeeze(
@@ -148,7 +148,7 @@ for i, (x, y) in enumerate(validation_dataset):
     values = [binary_accuracy_metric[j].result().numpy()
               for j in range(len(img_ratios))]
     print(
-        f'Batch {i} PAC:\t{values} - mean {np.mean(values)}')
+        f'Batch {i} BAC:\t{values} - mean {np.mean(values)}')
 
     values = [precision_metric[j].result().numpy()
               for j in range(len(img_ratios))]

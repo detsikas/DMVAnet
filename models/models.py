@@ -47,7 +47,7 @@ def build_model(model_type, model_shape):
         model = deeplabv3plus(model_shape)
     elif model_type == DILATED_MULTIRES:
         model = dilated_multires_visual_attention(
-            None, 16, True)
+            model_shape, 16, True)
     elif model_type == DILATED_VIS_ATTN_UNET:
         model = dilated_visual_attention_residual_unet(model_shape)
     elif model_type == PRETRAINED_MOBILENET_V2_ENCODER_RES_UNET:

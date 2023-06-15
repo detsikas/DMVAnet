@@ -65,6 +65,13 @@ def preprocess_training_data(image, label, target_image_size, augment):
         x = tf.image.stateless_random_flip_left_right(image=x, seed=seed)
         y = tf.image.stateless_random_flip_left_right(image=y, seed=seed)
 
+        x = tf.image.stateless_random_flip_up_down(image=x, seed=seed)
+        y = tf.image.stateless_random_flip_up_down(image=y, seed=seed)
+
+        k = int(tf.random.uniform([1], minval=0, maxval=4))[0]
+        x = tf.image.rot90(x, k=k)
+        y = tf.image.rot90(y, k=k)
+
         # Photometric distortion
         x = tf.cast(x, tf.uint8)
         x = tf.image.stateless_random_brightness(
@@ -80,6 +87,9 @@ def preprocess_training_data(image, label, target_image_size, augment):
         x = tf.image.stateless_random_hue(
             image=x, max_delta=18.0/180.0, seed=seed)  # torchvision sets 18
         x = tf.clip_by_value(x, 0, 255)
+        x = tf.cast(x, tf.uint8)
+        x = tf.image.stateless_random_jpeg_quality(
+            x, min_jpeg_quality=10, max_jpeg_quality=100, seed=seed)
 
     # x = tf.image.per_image_standardization(x)
     # x = NormalizationLayer(x)
@@ -131,7 +141,9 @@ def extract_inference_patches(image, target_image_size, stride):
     return x, h_anchors, w_anchors
 
 
-def configure_dataset(dataset_, batch_size=1):
+def configure_dataset(dataset_, batch_size=1, repeat=None):
+    if repeat is not None:
+        dataset_ = dataset_.repeat(repeat)
     if batch_size > 0:
         dataset_ = dataset_.batch(
             batch_size, num_parallel_calls=tf.data.AUTOTUNE)
@@ -181,7 +193,7 @@ def create_dataset_training_pipeline(source_directory, batch_size, target_size, 
     dataset = dataset.map(lambda image, label: preprocess_training_data(image, label, target_size, augment),
                           num_parallel_calls=tf.data.AUTOTUNE)
 
-    dataset = configure_dataset(dataset, batch_size)
+    dataset = configure_dataset(dataset, batch_size, 100)
 
     return dataset
 

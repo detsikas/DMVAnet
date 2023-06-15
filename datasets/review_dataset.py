@@ -18,6 +18,8 @@ parser.add_argument('--display-images',
                     help='Whether to display images',
                     action='store_true')
 parser.add_argument('--augment', action='store_true')
+parser.add_argument('--dataset-repetition',
+                    help='Repeat the dataset', type=int)
 args = parser.parse_args()
 
 target_image_size = args.target_image_size
@@ -25,12 +27,13 @@ dataset_source_path = args.dataset_source_path
 output_dir = args.output_dir
 display_images = args.display_images
 augment = args.augment
+dataset_repetition = args.dataset_repetition
 
 if output_dir is not None and not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 dataset = dataset_utils.create_dataset_training_pipeline(
-    dataset_source_path, 1, target_image_size, augment)
+    dataset_source_path, 1, target_image_size, augment, dataset_repetition if dataset_repetition is not None else 0)
 
 
 i = 0

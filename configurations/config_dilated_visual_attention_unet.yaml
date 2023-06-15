@@ -3,6 +3,7 @@ batch_size: 8
 epochs: 4000
 training_dataset_path: /data/raw_binarization_datasets/binarization_datasets/exp1/train
 validation_dataset_path: /data/raw_binarization_datasets/binarization_datasets/exp1/val
+dataset_repetition: 100
 model_type: dilated_visual_attention_unet
 
 # epochs calculation (from the segmenter paper)

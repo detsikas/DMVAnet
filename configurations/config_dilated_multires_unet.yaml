@@ -3,6 +3,7 @@ batch_size: 32
 epochs: 100
 training_dataset_path: /data/raw_binarization_datasets/binarization_datasets/exp1/train
 validation_dataset_path: /data/raw_binarization_datasets/binarization_datasets/exp1/val
+dataset_repetition: 100
 model_type: dilated_multires_unet
 
 # epochs calculation (from the segmenter paper)

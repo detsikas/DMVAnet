@@ -34,6 +34,7 @@ batch_size = config['batch_size']
 epochs = config['epochs']
 training_dataset_path = config['training_dataset_path']
 validation_dataset_path = config['validation_dataset_path']
+dataset_repetition = config['dataset_repetition']
 model_type = config['model_type']
 
 if not os.path.exists(output_dir):
@@ -44,9 +45,11 @@ with open(os.path.join(output_dir, 'config.yaml'), "w") as f:
 
 
 train_dataset = dataset_utils.create_dataset_training_pipeline(source_directory=training_dataset_path,
-                                                               batch_size=batch_size, target_size=target_image_size, augment=True)
+                                                               batch_size=batch_size, target_size=target_image_size, augment=True,
+                                                               dataset_repetition=dataset_repetition)
 validation_dataset = dataset_utils.create_dataset_training_pipeline(source_directory=validation_dataset_path,
-                                                                    batch_size=batch_size, target_size=target_image_size, augment=False)
+                                                                    batch_size=batch_size, target_size=target_image_size, augment=False,
+                                                                    dataset_repetition=0)
 
 input_shape = [target_image_size, target_image_size, 3]
 model = build_model(model_type=model_type, model_shape=input_shape)

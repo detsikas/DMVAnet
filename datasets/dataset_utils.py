@@ -142,9 +142,9 @@ def extract_inference_patches(image, target_image_size, stride):
     return x, h_anchors, w_anchors
 
 
-def configure_dataset(dataset_, batch_size=1, repeat=None):
-    if repeat is not None:
-        dataset_ = dataset_.repeat(repeat)
+def configure_dataset(dataset_, batch_size=1, dataset_repetition=0):
+    if dataset_repetition > 1:
+        dataset_ = dataset_.repeat(dataset_repetition)
     if batch_size > 0:
         dataset_ = dataset_.batch(
             batch_size, num_parallel_calls=tf.data.AUTOTUNE)
@@ -186,7 +186,7 @@ def initialize_dataset(source_directory):
     return dataset
 
 
-def create_dataset_training_pipeline(source_directory, batch_size, target_size, augment):
+def create_dataset_training_pipeline(source_directory, batch_size, target_size, augment, dataset_repetition):
     # Initial dataset setup
     dataset = initialize_dataset(source_directory)
 
@@ -194,7 +194,7 @@ def create_dataset_training_pipeline(source_directory, batch_size, target_size, 
     dataset = dataset.map(lambda image, label: preprocess_training_data(image, label, target_size, augment),
                           num_parallel_calls=tf.data.AUTOTUNE)
 
-    dataset = configure_dataset(dataset, batch_size, 100)
+    dataset = configure_dataset(dataset, batch_size, dataset_repetition)
 
     return dataset
 

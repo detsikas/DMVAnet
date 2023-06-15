@@ -15,8 +15,6 @@ parser.add_argument(
     '--output-dir', help='Output directory (where everything goes)')
 parser.add_argument(
     '--model-only', help='Output model only, without training', action='store_true')
-parser.add_argument(
-    '--epochs', help='Number of raining epochs', default=20, type=int)
 
 args = parser.parse_args()
 config_file = args.config_file
@@ -77,7 +75,7 @@ if not model_only:
 
     checkpoint_dir = os.path.join(model_dir, 'weights')
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-        filepath=checkpoint_dir, save_best_only=True, monitor='val_binary_accuracy', mode='max')
+        filepath=checkpoint_dir, save_best_only=True)
 
     tensorboard_callback = tf.keras.callbacks.TensorBoard(
         log_dir=os.path.join(output_dir, 'tensorboard_{}'.format(

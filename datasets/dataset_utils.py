@@ -48,8 +48,7 @@ def preprocess_training_data(image, label, target_image_size, augment):
             # For random transforms reference in torchvision
             # https://mmsegmentation.readthedocs.io/en/latest/_modules/mmseg/datasets/pipelines/transforms.html
             x = tf.image.resize(image, new_shape)
-            y = tf.image.resize(label, new_shape)
-            y = tf.where(y > 127, 255, 0)
+            y = tf.image.resize(label, new_shape, method='nearest')
         else:
             x = image
             y = label

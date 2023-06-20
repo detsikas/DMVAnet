@@ -130,8 +130,8 @@ for i, (x, y) in enumerate(validation_dataset):
              recall_metric[j].result().numpy())
         pf1_metric[j].update_state(tf.squeeze(
             y, axis=-1).numpy(), tf.squeeze(reconstructed_image, axis=-1).numpy())
-        # drd_metric[j].update_state(tf.squeeze(
-        #    y, axis=-1).numpy().astype(int), threshold_image(tf.squeeze(reconstructed_image, axis=-1).numpy().astype(int)))
+        drd_metric[j].update_state(tf.squeeze(
+            y, axis=-1).numpy().astype(int), threshold_image(tf.squeeze(reconstructed_image, axis=-1).numpy()).astype(int))
         # nrm_metric[j].update_state(y, reconstructed_image)
         # pm_metric[j].update_state(y, reconstructed_image)
         psnr_metric[j].update_state(y, reconstructed_image)
@@ -170,6 +170,11 @@ for i, (x, y) in enumerate(validation_dataset):
               for j in range(len(img_ratios))]
     print(
         f'Batch {i} pf1:\t{values} - mean {np.mean(values)}')
+
+    values = [drd_metric[j].result()
+              for j in range(len(img_ratios))]
+    print(
+        f'Batch {i} drd:\t{values} - mean {np.mean(values)}')
 
     values = [psnr_metric[j].result().numpy()
               for j in range(len(img_ratios))]

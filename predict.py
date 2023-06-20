@@ -95,7 +95,7 @@ binary_accuracy_metric = [tf.keras.metrics.BinaryAccuracy()
 precision_metric = [tf.keras.metrics.Precision()
                     for i in range(len(img_ratios))]
 recall_metric = [tf.keras.metrics.Recall() for i in range(len(img_ratios))]
-f1_metric = [F1Metric() for i in range(len(img_ratios))]
+f1_metric = np.zeros(len(img_ratios))
 pf1_metric = [PseudoF1Metric() for i in range(len(img_ratios))]
 drd_metric = [DRDMetric() for i in range(len(img_ratios))]
 nrm_metric = [NRMMetric() for i in range(len(img_ratios))]
@@ -125,8 +125,9 @@ for i, (x, y) in enumerate(validation_dataset):
         binary_accuracy_metric[j].update_state(y, reconstructed_image)
         precision_metric[j].update_state(y, reconstructed_image)
         recall_metric[j].update_state(y, reconstructed_image)
-        f1_metric[j].update_state(y.numpy().astype(int), threshold_image(
-            reconstructed_image.astype(int)))
+        f1_metric[j] = 2.0*precision_metric[j].result().numpy()*recall_metric[j].result().numpy() / \
+            (precision_metric[j].result().numpy() +
+             recall_metric[j].result().numpy())
         pf1_metric[j].update_state(tf.squeeze(
             y, axis=-1).numpy(), tf.squeeze(reconstructed_image, axis=-1).numpy())
         # drd_metric[j].update_state(tf.squeeze(
@@ -160,7 +161,7 @@ for i, (x, y) in enumerate(validation_dataset):
     print(
         f'Batch {i} REC:\t{values} - mean {np.mean(values)}')
 
-    values = [f1_metric[j].result().numpy()
+    values = [f1_metric[j]
               for j in range(len(img_ratios))]
     print(
         f'Batch {i} f1:\t{values} - mean {np.mean(values)}')

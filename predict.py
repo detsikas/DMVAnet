@@ -123,8 +123,10 @@ for i, (x, y) in enumerate(validation_dataset):
         mse_metric[j].update_state(y, reconstructed_image)
         binary_cross_entropy_metric[j].update_state(y, reconstructed_image)
         binary_accuracy_metric[j].update_state(y, reconstructed_image)
-        precision_metric[j].update_state(y, reconstructed_image)
-        recall_metric[j].update_state(y, reconstructed_image)
+        precision_metric[j].update_state(
+            y.numpy().flatten(), reconstructed_image.flatten())
+        recall_metric[j].update_state(
+            y.numpy().flatten(), reconstructed_image.flatten())
         f1_metric[j] = 2.0*precision_metric[j].result().numpy()*recall_metric[j].result().numpy() / \
             (precision_metric[j].result().numpy() +
              recall_metric[j].result().numpy())

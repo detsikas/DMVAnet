@@ -22,11 +22,14 @@ parser.add_argument('--stride', help='Image patch stride',
                     required=True, type=int)
 parser.add_argument(
     '--multiscale', help='Multiscale testing', action='store_true')
+parser.add_argument(
+    '--subset', help='Dataset subset path to use for validation')
 args = parser.parse_args()
 
 model_path = args.model_path
 stride = args.stride
 multiscale = args.multiscale
+subset = args.subset
 
 if not os.path.exists(model_path) or not os.path.isdir(model_path):
     print('Bad model path')
@@ -43,6 +46,14 @@ with open(config_file, "r") as f:
 
 target_image_size = config['target_image_size']
 validation_dataset_path = config['validation_dataset_path']
+
+if subset is not None:
+    validation_dataset_path = os.path.join(validation_dataset_path, subset)
+
+if not os.path.exists(validation_dataset_path) or not os.path.isdir(validation_dataset_path):
+    print('Bad validation path')
+    sys.exit(0)
+
 model_type = config['model_type']
 batch_size = 1
 input_shape = [target_image_size, target_image_size, 3]

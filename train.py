@@ -9,6 +9,21 @@ import yaml
 import sys
 import git
 
+
+class PrintLearningrate(tf.keras.callbacks.Callback):
+    def __init__(self):
+        super(PrintLearningrate, self).__init__()
+
+    def on_epoch_begin(self, epoch, logs=None):
+        if not hasattr(self.model.optimizer, "lr"):
+            raise ValueError('Optimizer must have a "lr" attribute.')
+        # Get the current learning rate from model's optimizer.
+        lr = float(tf.keras.backend.get_value(
+            self.model.optimizer.learning_rate))
+
+        print(f'\nEpoch {epoch+1}: Learning rate is {lr}.')
+
+
 parser = argparse.ArgumentParser(description='Train binarization model')
 parser.add_argument('--config-file', help='Configuration file', required=True)
 parser.add_argument(
@@ -54,8 +69,10 @@ validation_dataset = dataset_utils.create_dataset_training_pipeline(source_direc
 input_shape = [target_image_size, target_image_size, 3]
 model = build_model(model_type=model_type, model_shape=input_shape)
 
-adam_optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001)
-model.compile(optimizer=adam_optimizer, loss=DiceLoss(),
+lr_schedule = tf.keras.optimizers.schedules.PolynomialDecay(
+    initial_learning_rate=0.001, power=0.9, decay_steps=200000)
+adam_optimizer = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
+model.compile(optimizer=adam_optimizer, loss='binary_crossentropy',
               metrics=['binary_accuracy', 'mean_squared_error'])
 print(model.summary())
 
@@ -85,4 +102,4 @@ if not model_only:
             datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))),
         histogram_freq=1)
     history = model.fit(train_dataset, epochs=epochs, validation_data=validation_dataset,
-                        callbacks=[tensorboard_callback, model_checkpoint_callback])
+                        callbacks=[tensorboard_callback, model_checkpoint_callback, PrintLearningrate()])

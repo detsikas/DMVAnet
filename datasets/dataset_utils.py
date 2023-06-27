@@ -37,11 +37,7 @@ def preprocess_training_data(image, label, target_image_size, augment):
 
     if target_image_size is not None:
         if augment:
-            minimum_dimension = tf.cast(tf.math.minimum(
-                tf.shape(image)[0], tf.shape(image)[1]), tf.float32)
-            minimum_scale = tf.maximum(
-                0.5, target_image_size/minimum_dimension)
-            scale = tf.random.uniform([1], minval=minimum_scale, maxval=2.0)[0]
+            scale = tf.random.uniform([1], minval=0.5, maxval=2.0)[0]
             new_shape = [tf.cast(tf.cast(tf.shape(image)[0], tf.float32)*scale, tf.int32),
                          tf.cast(tf.cast(tf.shape(image)[1], tf.float32)*scale, tf.int32)]
 
@@ -50,8 +46,20 @@ def preprocess_training_data(image, label, target_image_size, augment):
             x = tf.image.resize(image, new_shape)
             y = tf.image.resize(label, new_shape, method='nearest')
         else:
-            x = image
+            x = tf.cast(image, tf.float32)
             y = label
+
+        # In case resizing gave a dimension smaller than target_image_size
+        if tf.shape(x)[0] < tf.shape(x)[1] and tf.shape(x)[0] < target_image_size:
+            new_shape = [target_image_size, tf.cast(
+                tf.shape(x)[1]*target_image_size/tf.shape(x)[0], tf.int32)]
+            x = tf.image.resize(x, new_shape)
+            y = tf.image.resize(y, new_shape, method='nearest')
+        elif tf.shape(x)[1] < tf.shape(x)[0] and tf.shape(x)[1] < target_image_size:
+            new_shape = [tf.cast(
+                tf.shape(x)[0]*target_image_size/tf.shape(x)[1], tf.int32), target_image_size]
+            x = tf.image.resize(x, new_shape)
+            y = tf.image.resize(y, new_shape, method='nearest')
 
         x = tf.image.stateless_random_crop(value=x, size=(target_image_size, target_image_size, x.shape[-1]),
                                            seed=seed)

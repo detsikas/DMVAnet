@@ -5,6 +5,7 @@ training_dataset_path: /data/raw_binarization_datasets/binarization_datasets/dib
 validation_dataset_path: /data/raw_binarization_datasets/binarization_datasets/dib/val
 dataset_repetition: 400
 model_type: dilated_multires_unet
+decay_steps: 200000
 
 # epochs calculation (from the segmenter paper)
 # training_dataset_items = 2975

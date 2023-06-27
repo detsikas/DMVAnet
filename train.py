@@ -24,6 +24,20 @@ class PrintLearningrate(tf.keras.callbacks.Callback):
         print(f'\nEpoch {epoch+1}: Learning rate is {lr}.')
 
 
+class PrintLearningrate(tf.keras.callbacks.Callback):
+    def __init__(self):
+        super(PrintLearningrate, self).__init__()
+
+    def on_epoch_begin(self, epoch, logs=None):
+        if not hasattr(self.model.optimizer, "lr"):
+            raise ValueError('Optimizer must have a "lr" attribute.')
+        # Get the current learning rate from model's optimizer.
+        lr = float(tf.keras.backend.get_value(
+            self.model.optimizer.learning_rate))
+
+        print(f'\nEpoch {epoch+1}: Learning rate is {lr}.')
+
+
 parser = argparse.ArgumentParser(description='Train binarization model')
 parser.add_argument('--config-file', help='Configuration file', required=True)
 parser.add_argument(
@@ -51,6 +65,7 @@ training_dataset_path = config['training_dataset_path']
 validation_dataset_path = config['validation_dataset_path']
 dataset_repetition = config['dataset_repetition']
 model_type = config['model_type']
+decay_steps = config['decay_steps'] if 'decay_steps' in config else 0
 
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
@@ -70,8 +85,9 @@ input_shape = [target_image_size, target_image_size, 3]
 model = build_model(model_type=model_type, model_shape=input_shape)
 
 lr_schedule = tf.keras.optimizers.schedules.PolynomialDecay(
-    initial_learning_rate=0.001, power=0.9, decay_steps=200000)
-adam_optimizer = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
+    initial_learning_rate=0.001, power=0.9, decay_steps=decay_steps)
+adam_optimizer = tf.keras.optimizers.Adam(
+    learning_rate=lr_schedule if decay_steps > 0 else 0.001)
 model.compile(optimizer=adam_optimizer, loss='binary_crossentropy',
               metrics=['binary_accuracy', 'mean_squared_error'])
 print(model.summary())
@@ -102,4 +118,4 @@ if not model_only:
             datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))),
         histogram_freq=1)
     history = model.fit(train_dataset, epochs=epochs, validation_data=validation_dataset,
-                        callbacks=[tensorboard_callback, model_checkpoint_callback, PrintLearningrate()])
+                        callbacks=[tensorboard_callback, model_checkpoint_callback, PrintLearningrate(), PrintLearningrate()])
